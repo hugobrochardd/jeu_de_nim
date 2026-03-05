@@ -237,7 +237,7 @@ class NimGame {
     
     initFirebase() {
         const firebaseConfig = {
-            apiKey: "AIzaSyCDUVy0k9YiocQamccT78P5v5Ovau1S-dk",
+            apiKey: "SECRET",
             authDomain: "jeudenim.firebaseapp.com",
             databaseURL: "https://jeudenim-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "jeudenim",
