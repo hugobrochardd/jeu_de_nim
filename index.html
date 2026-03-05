@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de NIM - Version Misère</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container" id="app">
+        
+        <!-- ========================================
+             ÉCRAN D'ACCUEIL
+             ======================================== -->
+        <div id="home-screen" class="screen active">
+            <div class="home-header">
+                <h1 class="game-title">🧠 JEU DE NIM</h1>
+                <p class="game-subtitle">Version Misère • Celui qui prend le dernier perd !</p>
+            </div>
+            
+            <div class="mode-selection">
+                <button class="mode-btn" id="btn-single-player" data-mode="single">
+                    <span class="mode-icon">🎯</span>
+                    <span class="mode-title">Solo</span>
+                    <span class="mode-desc">Contre l'IA</span>
+                </button>
+                
+                <button class="mode-btn" id="btn-multiplayer" data-mode="multi">
+                    <span class="mode-icon">👥</span>
+                    <span class="mode-title">Multijoueur</span>
+                    <span class="mode-desc">Local 2 joueurs</span>
+                </button>
+                
+                <button class="mode-btn" id="btn-online" data-mode="online">
+                    <span class="mode-icon">🌐</span>
+                    <span class="mode-title">En ligne</span>
+                    <span class="mode-desc">Jouez à distance</span>
+                </button>
+            </div>
+            
+            <button class="profile-btn" id="btn-profile">
+                <span>👤</span> Mon Profil
+            </button>
+        </div>
+
+        <!-- ========================================
+             ÉCRAN CHOIX DIFFICULTÉ (Solo)
+             ======================================== -->
+        <div id="difficulty-screen" class="screen">
+            <button class="back-btn" data-target="home-screen">← Retour</button>
+            <h2 class="screen-title">Choisissez la difficulté</h2>
+            
+            <div class="difficulty-options">
+                <div class="difficulty-card" data-difficulty="easy">
+                    <span class="diff-icon">🤡</span>
+                    <span class="diff-name">Facile</span>
+                    <span class="diff-desc">Coups aléatoires</span>
+                </div>
+                <div class="difficulty-card" data-difficulty="normal">
+                    <span class="diff-icon">👾</span>
+                    <span class="diff-name">Normal</span>
+                    <span class="diff-desc">MinMax limité</span>
+                </div>
+                <div class="difficulty-card selected" data-difficulty="hard">
+                    <span class="diff-icon">🧠</span>
+                    <span class="diff-name">Difficile</span>
+                    <span class="diff-desc">Alpha-Beta complet</span>
+                </div>
+                <div class="difficulty-card" data-difficulty="neural">
+                    <span class="diff-icon">🤖</span>
+                    <span class="diff-name">IA Neuronale</span>
+                    <span class="diff-desc">Réseau de neurones</span>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" id="btn-confirm-difficulty">Continuer →</button>
+        </div>
+
+        <!-- ========================================
+             ÉCRAN PERSONNALISATION JOUEUR (Solo)
+             ======================================== -->
+        <div id="player-setup-screen" class="screen">
+            <button class="back-btn" data-target="difficulty-screen">← Retour</button>
+            <h2 class="screen-title">Personnalisez votre joueur</h2>
+            
+            <div class="player-setup-card">
+                <div class="form-group">
+                    <label>Votre nom :</label>
+                    <input type="text" id="solo-player-name" value="Joueur" maxlength="15" class="input-field">
+                </div>
+                
+                <div class="form-group">
+                    <label>Votre couleur :</label>
+                    <div class="color-picker" id="solo-color-picker">
+                        <div class="color-option selected" data-color="#ff9500" style="background: #ff9500"></div>
+                        <div class="color-option" data-color="#007aff" style="background: #007aff"></div>
+                        <div class="color-option" data-color="#34c759" style="background: #34c759"></div>
+                        <div class="color-option" data-color="#ff3b30" style="background: #ff3b30"></div>
+                        <div class="color-option" data-color="#5856d6" style="background: #5856d6"></div>
+                        <div class="color-option" data-color="#ff2d55" style="background: #ff2d55"></div>
+                        <div class="color-option" data-color="#af52de" style="background: #af52de"></div>
+                        <div class="color-option" data-color="#5ac8fa" style="background: #5ac8fa"></div>
+                        <div class="color-option" data-color="#ffcc00" style="background: #ffcc00"></div>
+                        <div class="color-option" data-color="#00c7be" style="background: #00c7be"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" id="btn-start-solo">Lancer la partie</button>
+        </div>
+
+        <!-- ========================================
+             ÉCRAN PERSONNALISATION 2 JOUEURS (Multi)
+             ======================================== -->
+        <div id="multi-setup-screen" class="screen">
+            <button class="back-btn" data-target="home-screen">← Retour</button>
+            <h2 class="screen-title">Configuration des joueurs</h2>
+            
+            <div class="multi-players-setup">
+                <div class="player-setup-card">
+                    <h3>Joueur 1</h3>
+                    <div class="form-group">
+                        <label>Nom :</label>
+                        <input type="text" id="multi-player1-name" value="Joueur 1" maxlength="15" class="input-field">
+                    </div>
+                    <div class="form-group">
+                        <label>Couleur :</label>
+                        <div class="color-picker" id="multi-player1-color">
+                            <div class="color-option selected" data-color="#ff9500" style="background: #ff9500"></div>
+                            <div class="color-option" data-color="#007aff" style="background: #007aff"></div>
+                            <div class="color-option" data-color="#34c759" style="background: #34c759"></div>
+                            <div class="color-option" data-color="#ff3b30" style="background: #ff3b30"></div>
+                            <div class="color-option" data-color="#5856d6" style="background: #5856d6"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="vs-divider">VS</div>
+                
+                <div class="player-setup-card">
+                    <h3>Joueur 2</h3>
+                    <div class="form-group">
+                        <label>Nom :</label>
+                        <input type="text" id="multi-player2-name" value="Joueur 2" maxlength="15" class="input-field">
+                    </div>
+                    <div class="form-group">
+                        <label>Couleur :</label>
+                        <div class="color-picker" id="multi-player2-color">
+                            <div class="color-option" data-color="#ff9500" style="background: #ff9500"></div>
+                            <div class="color-option selected" data-color="#007aff" style="background: #007aff"></div>
+                            <div class="color-option" data-color="#34c759" style="background: #34c759"></div>
+                            <div class="color-option" data-color="#ff3b30" style="background: #ff3b30"></div>
+                            <div class="color-option" data-color="#5856d6" style="background: #5856d6"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" id="btn-start-multi">Lancer la partie</button>
+        </div>
+
+        <!-- ========================================
+             ÉCRAN ONLINE - MENU
+             ======================================== -->
+        <div id="online-menu-screen" class="screen">
+            <button class="back-btn" data-target="home-screen">← Retour</button>
+            <h2 class="screen-title">Jeu en ligne</h2>
+            
+            <div class="online-options">
+                <button class="online-option-btn" id="btn-create-game">
+                    <span class="option-icon">➕</span>
+                    <span class="option-title">Créer une partie</span>
+                    <span class="option-desc">Créez une partie publique</span>
+                </button>
+                
+                <button class="online-option-btn" id="btn-join-game">
+                    <span class="option-icon">🔍</span>
+                    <span class="option-title">Rejoindre une partie</span>
+                    <span class="option-desc">Voir les parties disponibles</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ========================================
+             ÉCRAN CRÉATION PARTIE ONLINE
+             ======================================== -->
+        <div id="create-game-screen" class="screen">
+            <button class="back-btn" data-target="online-menu-screen">← Retour</button>
+            <h2 class="screen-title">Créer une partie</h2>
+            
+            <div class="create-game-form">
+                <div class="form-group">
+                    <label>Nom de la partie :</label>
+                    <input type="text" id="game-name-input" placeholder="Ex: Partie de Hugo" maxlength="25" class="input-field">
+                </div>
+                
+                <div class="form-group">
+                    <label>Votre nom :</label>
+                    <input type="text" id="online-player-name" value="Joueur" maxlength="15" class="input-field">
+                </div>
+                
+                <div class="form-group">
+                    <label>Votre couleur :</label>
+                    <div class="color-picker" id="online-color-picker">
+                        <div class="color-option selected" data-color="#ff9500" style="background: #ff9500"></div>
+                        <div class="color-option" data-color="#007aff" style="background: #007aff"></div>
+                        <div class="color-option" data-color="#34c759" style="background: #34c759"></div>
+                        <div class="color-option" data-color="#ff3b30" style="background: #ff3b30"></div>
+                        <div class="color-option" data-color="#5856d6" style="background: #5856d6"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" id="btn-create-room">Créer la partie</button>
+        </div>
+
+        <!-- ========================================
+             ÉCRAN ATTENTE JOUEUR (Host)
+             ======================================== -->
+        <div id="waiting-screen" class="screen">
+            <button class="back-btn" id="btn-cancel-room">← Annuler</button>
+            <h2 class="screen-title">En attente d'un joueur...</h2>
+            
+            <div class="waiting-content">
+                <div class="loader-ring"></div>
+                <p class="room-name">Partie : <span id="display-room-name">-</span></p>
+                <p class="room-code">Code : <span id="display-room-code">-</span></p>
+            </div>
+        </div>
+
+        <!-- ========================================
+             ÉCRAN LISTE DES PARTIES
+             ======================================== -->
+        <div id="lobby-screen" class="screen">
+            <button class="back-btn" data-target="online-menu-screen">← Retour</button>
+            <h2 class="screen-title">Parties disponibles</h2>
+            
+            <div class="form-group">
+                <label>Votre nom :</label>
+                <input type="text" id="join-player-name" value="Joueur" maxlength="15" class="input-field">
+            </div>
+            
+            <div class="form-group">
+                <label>Votre couleur :</label>
+                <div class="color-picker" id="join-color-picker">
+                    <div class="color-option" data-color="#ff9500" style="background: #ff9500"></div>
+                    <div class="color-option selected" data-color="#007aff" style="background: #007aff"></div>
+                    <div class="color-option" data-color="#34c759" style="background: #34c759"></div>
+                    <div class="color-option" data-color="#ff3b30" style="background: #ff3b30"></div>
+                    <div class="color-option" data-color="#5856d6" style="background: #5856d6"></div>
+                </div>
+            </div>
+            
+            <div class="games-list" id="games-list">
+                <p class="loading-msg">Chargement des parties...</p>
+            </div>
+        </div>
+
+        <!-- ========================================
+             ÉCRAN PROFIL
+             ======================================== -->
+        <div id="profile-screen" class="screen">
+            <button class="back-btn" data-target="home-screen">← Retour</button>
+            <h2 class="screen-title">Mon Profil</h2>
+            
+            <!-- Édition du profil -->
+            <div class="profile-edit-card">
+                <div class="form-group">
+                    <label>Mon nom :</label>
+                    <input type="text" id="profile-name-input" value="Joueur" maxlength="15" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label>Ma couleur :</label>
+                    <div class="color-picker" id="profile-color-picker">
+                        <div class="color-option selected" data-color="#ff9500" style="background: #ff9500"></div>
+                        <div class="color-option" data-color="#007aff" style="background: #007aff"></div>
+                        <div class="color-option" data-color="#34c759" style="background: #34c759"></div>
+                        <div class="color-option" data-color="#ff3b30" style="background: #ff3b30"></div>
+                        <div class="color-option" data-color="#5856d6" style="background: #5856d6"></div>
+                        <div class="color-option" data-color="#ff2d55" style="background: #ff2d55"></div>
+                        <div class="color-option" data-color="#af52de" style="background: #af52de"></div>
+                        <div class="color-option" data-color="#5ac8fa" style="background: #5ac8fa"></div>
+                        <div class="color-option" data-color="#ffcc00" style="background: #ffcc00"></div>
+                        <div class="color-option" data-color="#00c7be" style="background: #00c7be"></div>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-small" id="btn-save-profile">💾 Sauvegarder le profil</button>
+            </div>
+            
+            <!-- Statistiques -->
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-games-played">0</span>
+                    <span class="stat-label">Parties jouées</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-games-won">0</span>
+                    <span class="stat-label">Victoires</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-games-lost">0</span>
+                    <span class="stat-label">Défaites</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-win-rate">0%</span>
+                    <span class="stat-label">Taux de victoire</span>
+                </div>
+            </div>
+            
+            <h3 class="section-title">Parties enregistrées</h3>
+            <div class="saved-games-list" id="saved-games-list">
+                <p class="empty-msg">Aucune partie enregistrée</p>
+            </div>
+        </div>
+
+        <!-- ========================================
+             ÉCRAN DE JEU
+             ======================================== -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <button class="back-btn" id="btn-quit-game">← Quitter</button>
+                <button class="save-btn" id="btn-save-game" style="display:none;">💾 Sauvegarder & Quitter</button>
+            </div>
+            
+            <!-- Info barre -->
+            <div class="game-info-bar" id="game-info-bar">
+                <div class="info-item">
+                    <span class="info-label">Objets</span>
+                    <span class="info-value" id="remaining-count">15</span>
+                </div>
+                <div class="info-item current-turn">
+                    <span class="info-label">Tour de</span>
+                    <span class="info-value" id="current-player-name">-</span>
+                </div>
+            </div>
+            
+            <!-- Zone des objets -->
+            <div class="objects-container">
+                <div id="objects-display" class="objects-display"></div>
+            </div>
+            
+            <!-- Zone des joueurs -->
+            <div class="players-bar">
+                <div class="player-card" id="player1-card">
+                    <div class="player-avatar" id="player1-avatar">J1</div>
+                    <span class="player-name" id="player1-name">Joueur 1</span>
+                </div>
+                <div class="vs-badge">VS</div>
+                <div class="player-card" id="player2-card">
+                    <div class="player-avatar" id="player2-avatar">J2</div>
+                    <span class="player-name" id="player2-name">Joueur 2</span>
+                </div>
+            </div>
+            
+            <!-- Boutons d'action -->
+            <div class="game-actions">
+                <div class="action-buttons">
+                    <button class="take-btn" data-amount="1" id="take-1">1</button>
+                    <button class="take-btn" data-amount="2" id="take-2">2</button>
+                    <button class="take-btn" data-amount="3" id="take-3">3</button>
+                </div>
+                <button class="confirm-btn" id="confirm-move-btn" disabled>✓ Confirmer</button>
+            </div>
+            
+            <!-- Message de statut -->
+            <div class="status-bar" id="status-bar"></div>
+        </div>
+
+        <!-- ========================================
+             ÉCRAN FIN DE PARTIE
+             ======================================== -->
+        <div id="end-screen" class="screen">
+            <div class="end-content">
+                <h2 class="end-title" id="end-title">🎉 Partie terminée !</h2>
+                <p class="end-result" id="end-result"></p>
+            </div>
+            
+            <div class="end-actions">
+                <button class="btn btn-primary" id="btn-replay">🔄 Rejouer</button>
+                <button class="btn btn-secondary" id="btn-save-result">💾 Sauvegarder</button>
+                <button class="btn btn-secondary" id="btn-end-menu">🏠 Accueil</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
+    <!-- Application Scripts -->
+    <script src="neural.js"></script>
+    <script src="ai.js"></script>
+    <script src="online.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
